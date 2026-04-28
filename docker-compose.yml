@@ -1,0 +1,54 @@
+##the socker composant is a file with type yml (YAMAL Aint Markup Language) we usse it to define the services and network and volumes[manage multiole continers application as a signal]
+## this is  a datta serialization language and it's a human readable
+version: '3'
+services:
+  web:
+    contaier_name: nginx ## this for siting the nginx configuration 
+    image: nginx:latest
+    port: 
+      -"80:80"
+    volumes:
+      -./nginx/nginx.conf:/etc/nginx/nginx.conf 
+      -./certs:/etc/nginx/certs
+    restart: alwa
+    mysql:
+      image: mariadb
+      container_name: mariadb
+      environment:
+        MARIADB_ROOT_PASSWORD: 1234
+        volumes:
+          -mariadb_volume:/var.lib/mysql
+        network:
+          -mariadb_network
+        port:
+          -3307:3306
+    volumes:
+      mariadb_volume:
+    networks:
+      mariadb_network:
+
+      
+    image: wordpres
+    volumes:
+      -
+      -
+    container_name: wordpres
+    build:
+          context: /wordpres
+          dockerfile:dockerfile 
+
+
+    #this is for reverse proxy
+    reverse-proxy:
+      image: nginx::latest
+      container_name:reverse_proxy
+      depends_on:
+      
+      volume:
+        - ./reverse_proxy/nginx.conf:/etc/nginx/nginx.conf
+      port:
+        - 80:80
+
+  database:
+
+  #after run this file it will creat the network "coffeetime_default"and creat the coffeetime_website 
