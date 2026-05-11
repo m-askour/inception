@@ -3,7 +3,7 @@
 
 
 ###latest mean it's the last virsion image of this image
-FROM debian:latest
+FROM debian:buster
 
 #RUN command
 
@@ -11,13 +11,18 @@ FROM debian:latest
 
 
 #WORKDIR /the/workdir/path
+RUN apt-get update -y && apt-get install mariadb-server -y
 COPY init.sql /docker-entrypoint-initdb.d/
 COPY mariadb.conf /etc/mysql/mariadb.conf.d/
 COPY database_setup.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/database_setup.sh
-RUN apt-get update && apt-get install -y mariadb-server mariadb-client && apt-get clean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+
 
 
 
 #CMD [ "executable" ]
+
+
+
 EXPOSE 3306
+
+CMD ["mysqld"]
