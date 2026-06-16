@@ -1,53 +1,40 @@
-##the socker composant is a file with type yml (YAMAL Aint Markup Language) we usse it to define the services and network and volumes[manage multiole continers application as a signal]
-## this is  a datta serialization language and it's a human readable
 services:
-    nginx:
-      container_name: nginx ## this for siting the nginx configuration 
-      image: nginx:1.28
-      ports: 
-        # - "8080:80"
-        - "8443:443"
-      volumes:
-        - ./certs:/etc/nginx/certs
-        - wp_volume:/var/www/html
-      depends_on:
-        - wordpress
-      networks:
-        - inception
-      restart: always
-    mariadb:
-      image: mariadb:11.8
-      container_name: mariadb
-      env_file:
-        - .env
-      # environment:
-      #   MYSQL_DATABASE: wordpress
-      #   MYSQL_USER: user
-      #   MYSQL_PASSWORD: password
-      #   MARIADB_ROOT_PASSWORD: password
-      volumes:
-        - mariadb_volume:/var/lib/mysql
-      networks:
-        - inception
-      restart: always
-    wordpress:
-      image: wordpress:6.8-php8.3-fpm
-      container_name: wordpress
-      env_file:
-        - .env
-      # environment:
-      #   WORDPRESS_DB_HOST: mariadb:3306
-      #   WORDPRESS_DB_NAME: wordpress
-      #   WORDPRESS_DB_USER: user
-      #   WORDPRESS_DB_PASSWORD: password
-      volumes:
-        - wp_volume:/var/www/html
-      networks:
-        - inception
-      depends_on:
-        - mariadb
-      restart: always
+  nginx:
+    container_name: nginx
+    build: ./nginx
+    ports:
+      - "8443:443"
+    volumes:
+      - wp_volume:/var/www/html
+    depends_on:
+      - wordpress
+    networks:
+      - inception
+    restart: always
 
+  mariadb:
+    build: ./mariadb
+    container_name: mariadb
+    env_file:
+      - .env
+    volumes:
+      - mariadb_volume:/var/lib/mysql
+    networks:
+      - inception
+    restart: always
+
+  wordpress:
+    build: ./wordpress
+    container_name: wordpress
+    env_file:
+      - .env
+    volumes:
+      - wp_volume:/var/www/html
+    networks:
+      - inception
+    depends_on:
+      - mariadb
+    restart: always
 
 volumes:
   mariadb_volume:
@@ -55,13 +42,13 @@ volumes:
       type: none
       o: bind
       device: /home/maskour/data/mariadb
+
   wp_volume:
     driver_opts:
       type: none
       o: bind
       device: /home/maskour/data/wordpress
-networks:
-    inception:
 
-  #after run this file it will creat the network "coffeetime_default"and creat the coffeetime_website 
-# version: '3.8'
+networks:
+  inception:
+    driver: bridge
