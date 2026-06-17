@@ -10,6 +10,11 @@ server::server(int hostname, int type, int protocole)
       Maxclient_fd(1024),
       backlog(Maxclient_fd)
 {
+
+
+
+
+    
 }
 server::server(const server &other)
 {
