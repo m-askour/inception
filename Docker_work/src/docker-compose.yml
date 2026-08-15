@@ -1,10 +1,8 @@
 services:
   nginx:
-    image: nginx:inception
     container_name: nginx
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
+    build: ./requirements/nginx
+    image: nginx
     env_file:
       - .env
     ports:
@@ -18,24 +16,17 @@ services:
     restart: always
 
   mariadb:
-    image: mariadb:inception
-    build:
-      context: ./mariadb
-      dockerfile: Dockerfile
+    build: ./requirements/mariadb
     container_name: mariadb
+    image: mariadb
     env_file:
       - .env
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_ADMIN_USER: ${MYSQL_ADMIN_USER}
       MYSQL_PASSWORD_FILE: /run/secrets/db_password
-      MYSQL_ADMIN_PASSWORD_FILE: /run/secrets/credentials
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
     secrets:
       - db_password
       - db_root_password
-      - credentials
     volumes:
       - mariadb_volume:/var/lib/mysql
     networks:
@@ -43,38 +34,35 @@ services:
     restart: always
 
   wordpress:
-    image: wordpress:inception
-    build:
-      context: ./wordpress
-      dockerfile: Dockerfile
+    build: ./requirements/wordpress
     container_name: wordpress
+    image: wordpress
     env_file:
       - .env
     environment:
-      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}
-      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
-      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
       WORDPRESS_DB_PASSWORD_FILE: /run/secrets/db_password
+      WP_ADMIN_PASSWORD_FILE: /run/secrets/wp_admin_password
+      WP_USER_PASSWORD_FILE: /run/secrets/wp_user_password
     secrets:
       - db_password
+      - wp_admin_password
+      - wp_user_password
     volumes:
       - wp_volume:/var/www/html
-    depends_on:
-      - mariadb
     networks:
       - inception
+    depends_on:
+      - mariadb
     restart: always
 
 volumes:
   mariadb_volume:
-    driver: local
     driver_opts:
       type: none
       o: bind
       device: /home/maskour/data/mariadb
 
   wp_volume:
-    driver: local
     driver_opts:
       type: none
       o: bind
@@ -89,5 +77,7 @@ secrets:
     file: ../secrets/db_password.txt
   db_root_password:
     file: ../secrets/db_root_password.txt
-  credentials:
-    file: ../secrets/credentials.txt
+  wp_admin_password:
+    file: ../secrets/wp_admin_password.txt
+  wp_user_password:
+    file: ../secrets/wp_user_password.txt
