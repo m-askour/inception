@@ -1,0 +1,11 @@
+DOMAIN_NAME=maskour.42.fr
+
+MYSQL_DATABASE=wordpress
+MYSQL_USER=wp_user
+MYSQL_ADMIN_USER=wp_admin
+
+WORDPRESS_DB_HOST=mariadb
+WORDPRESS_DB_NAME=wordpress
+WORDPRESS_DB_USER=wp_user
+
+WP_ADMIN_EMAIL=admin@maskour.42.fr
