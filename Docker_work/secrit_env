@@ -8,4 +8,9 @@ WORDPRESS_DB_HOST=mariadb
 WORDPRESS_DB_NAME=wordpress
 WORDPRESS_DB_USER=wp_user
 
+WP_TITLE=MyWordPress
+WP_ADMIN_USER=wp_admin
 WP_ADMIN_EMAIL=admin@maskour.42.fr
+
+WP_USER=maskour
+WP_USER_EMAIL=maskour@maskour.42.fr
