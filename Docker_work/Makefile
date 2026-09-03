@@ -1,20 +1,27 @@
-NAME_USER=maskour
-DATA_PATH=./home/${NAME_USER}/data
-
-all:
-	@mkdir -p ${DATA_PATH}/mariadb ${DATA_PATH}/wordpress
+all: up
+ 
+up:
+	@mkdir -p /home/maskour/data/mariadb /home/maskour/data/wordpress
 	@docker compose -f ./src/docker-compose.yml up -d --build
-
-status:
-	@docker compose -f ./src/docker-compose.yml ps
-
+ 
 down:
 	@docker compose -f ./src/docker-compose.yml down
-
-clean:
-	@docker compose -f ./src/docker-compose.yml down --volumes --remove-orphans
-
+ 
+stop:
+	@docker compose -f ./src/docker-compose.yml stop
+ 
+start:
+	@docker compose -f ./src/docker-compose.yml start
+ 
+status:
+	@docker ps
+ 
+clean: down
+	@docker system prune -f
+ 
 fclean: clean
-	@docker system prune -af
-
+	@docker volume rm inception_mariadb_volume inception_wp_volume 2>/dev/null || true
+	@docker rmi -f nginx mariadb wordpress 2>/dev/null || true
+	@sudo rm -rf /home/maskour/data/mariadb /home/maskour/data/wordpress
+ 
 re: fclean all
