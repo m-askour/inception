@@ -2,7 +2,6 @@ services:
   nginx:
     container_name: nginx
     build: ./requirements/nginx
-    image: nginx
     env_file:
       - .env
     ports:
@@ -18,7 +17,6 @@ services:
   mariadb:
     build: ./requirements/mariadb
     container_name: mariadb
-    image: mariadb
     env_file:
       - .env
     environment:
@@ -36,7 +34,6 @@ services:
   wordpress:
     build: ./requirements/wordpress
     container_name: wordpress
-    image: wordpress
     env_file:
       - .env
     environment:

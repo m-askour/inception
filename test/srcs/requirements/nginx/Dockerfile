@@ -14,6 +14,4 @@ COPY ./tools/TSL-config.sh /usr/local/bin/TSL-config.sh
 
 RUN chmod +x /usr/local/bin/TSL-config.sh
 
-EXPOSE 443
-
 CMD ["/usr/local/bin/TSL-config.sh"]

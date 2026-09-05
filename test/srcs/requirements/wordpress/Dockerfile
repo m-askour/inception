@@ -2,7 +2,7 @@
 FROM debian:bookworm
 
 RUN apt-get update && apt-get install -y \
-    wget curl bash \
+    curl \
     php php-fpm php-mysql php-cli php-mbstring php-gd \
     mariadb-client \
     && rm -rf /var/lib/apt/lists/*
@@ -19,6 +19,5 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 COPY tools/install_wordPress.sh /usr/local/bin/install_wordPress.sh
 RUN chmod +x /usr/local/bin/install_wordPress.sh
 
-EXPOSE 9000
 
 CMD ["/usr/local/bin/install_wordPress.sh"]

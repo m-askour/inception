@@ -22,9 +22,6 @@ until mysqladmin ping -h"${WORDPRESS_DB_HOST%%:*}" -u"$WORDPRESS_DB_USER" -p"$WO
     sleep 2
 done
 
-if [ ! -f wp-load.php ]; then
-    wp core download --allow-root
-fi
 
 if [ ! -f wp-config.php ]; then
     wp config create \
